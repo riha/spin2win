@@ -1,0 +1,107 @@
+﻿@model PlayViewModel
+@{
+    ViewBag.Title = "Game";
+}
+
+@section js {
+    <script type="text/javascript">
+        $(function () {
+            
+            var serverSidePlayer = @Html.Raw(Json.Encode(Model.Players));
+            var serverSideSettings = @Html.Raw(Json.Encode(Model.Settings));
+
+            var players = Models.ModelConverter.convertServerSidePlayerModel(serverSidePlayer);
+            var settings = Models.ModelConverter.convertServerSideSettingModel(serverSideSettings);
+
+            var canvas = document.getElementById('wheel-context');
+            var canvasBg = document.getElementById('wheel-context-bg');
+            var wheel = new Models.Wheel(canvas, canvasBg);
+
+            ko.applyBindings(new ViewModels.Play.ViewModel(players, settings, wheel));
+
+        });
+    </script>
+}
+
+@section nav
+{
+@*    <ul class="nav">
+        <li >@Html.ActionLink("Admin", "Index", "Admin")</li>
+        <li class="active"><a href="#">Play!</a></li>
+        <li><a href="#">About</a></li>
+    </ul>*@
+}
+
+<div class="row firstRow">
+    <div class="span2">
+        <div class="panel">
+            <div class="header" data-bind="text: currentPlayer().name">
+                Mr ?
+            </div>
+            <div class="body">
+                <img width="140" height="140" data-bind="css: {'animated tada': currentPlayer().runWinnerAnimation},attr:{src:currentPlayer().pictureUrl!=null?currentPlayer().pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" src="@Href("~/Content/Images/unknown.png")" />
+            </div>
+        </div>
+        <div class="panel">
+            <div class="header" data-bind="text: 'Round ' + currentRound()">
+            </div>
+            <div class="body" style="text-align: center">
+                <div class="btn btn-block btn-large btn-inverse" data-bind="click:function(data) {$root.spin(data,$root)},css:{'disabled':running()}">Spin!</div>
+            </div>
+        </div>
+    </div>
+    <div class="span6" style="position: relative;">
+        <div class="panel">
+            <div class="body" style="padding-left: 5px;">
+                <div style="position: absolute; left: 33px; top: 40px; z-index: 400">
+                    <img src="@Href("~/Content/Images/wheel-center.png")" />
+                </div>
+                <div style="position: absolute; left: 210px; top: -20px; z-index: 300">
+                    <img src="@Href("~/Content/Images/arrow.png")" />
+                </div>
+                <div>
+                    <canvas id="wheel-context" data-bind="style:{ '-webkit-transform':degreeTransformation}" width="450" height="450" style="position: absolute; z-index: 200;"></canvas>
+                    <canvas id="wheel-context-bg" height="450" width="450" style="z-index: 100"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="span4 playerList" data-bind="foreach: activePlayers">
+        <div class="panel" data-bind="css: repaintAnimation">
+            <div class="left">
+                <div data-bind="style:{'background-color':color}" class="color">&nbsp;</div>
+                <div class="image">
+                    <img data-bind="attr:{src:pictureUrl}" src="@Url.Content("~/Content/Images/unknown.png")" />
+                </div>
+            </div>
+            <div class="center">
+                <div class="info">
+                    <div class="name" data-bind="text:name">
+                    </div>
+                    <div class="stars" data-bind="foreach: wins">
+                        <img alt="" src="" data-bind="attr: {src: $data ? '@Href("~/Content/Images/star.png")' : '@Href("~/Content/Images/star-inactive.png")'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="data" data-bind="text: $index()+1"></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal fade" data-bind="modal:showWinner">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Winner!</h3>
+    </div>
+    <div class="modal-body">
+        <p>We have a winner!</p>
+    </div>
+    <div class="modal-footer">
+        @Html.ActionLink("End game", "Index", "Admin", null, new { @class = "btn" })
+        <a href="#" data-dismiss="modal" data-bind="click: $root.continuePlay" class="btn btn-primary">Continue game and find next winner!</a>
+    </div>
+</div>

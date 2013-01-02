@@ -1,0 +1,109 @@
+﻿@model AdminViewModel
+@{
+    ViewBag.Title = "Admin";
+}
+@section js {
+    <script type="text/javascript">
+        $(function () {
+            var serverSidePlayer = @Html.Raw(Json.Encode(Model.Players));
+            var serverSideSettings = @Html.Raw(Json.Encode(Model.Settings));
+
+            var players = Models.ModelConverter.convertServerSidePlayerModel(serverSidePlayer);
+            var settings = Models.ModelConverter.convertServerSideSettingModel(serverSideSettings);
+
+            ko.applyBindings(new ViewModels.Admin.ViewModel(players, settings));
+        });
+    </script>
+}
+
+@section nav
+{
+    @*    <ul class="nav">
+        <li class="active"><a href="#">Admin</a></li>
+        <li>@Html.ActionLink("Play!", "Index", "Play")</li>
+        <li><a href="#">About</a></li>
+    </ul>*@
+}
+
+<div class="row firstRow">
+    <div class="span4">
+        <div class="panel">
+            <div class="header">Number of rounds</div>
+            <div class="body">
+                <select data-bind="options:ko.observableArray([1,2,3,4,5,6,7,8,9]),value:settings.numberOfRounds,event:{ change:$root.saveSetting }"></select>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="body">
+                <!-- byt till knapp och ha en clieck event -->
+                <a class="btn btn-block btn-inverse btn-large" data-bind="css:{disabled:players().length < 2}" href="@Url.Action("Index", "Play")">Play!</a>
+            </div>
+        </div>
+    </div>
+    <div class="span8">
+        <div class="panel">
+            <div class="header">Players</div>
+            <div class="body" style="padding: 1px 0px 20px 0px">
+                <table class="playerList">
+                    <tbody data-bind="foreach: players">
+                        <tr data-bind="css:{excluded: !included()}">
+                            <td class="image">
+                                <img alt="gravatar" data-bind="attr:{src:pictureUrl()!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" src="" /></td>
+                            <td data-bind="text: name"></td>
+                            <td class="slots" data-bind="text: numberOfSlots() + '/' + $root.totalNumberOfSlots()"></td>
+                            <td class="actions">
+                                <a data-bind="click:$root.editPlayer" href="#">Edit</a>
+                                <span>|</span>
+                                <a data-bind="click:$root.includePlayer, text: included() ? 'Exclude' : 'Include'" href="#">Include</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align: right; margin-top: 15px; padding-right: 10px;">
+                    <a data-bind="if:players().length > 0,click:$root.addPlayer" href="#">Add new player</a>
+                </div>
+                <div data-bind="if:players().length < 1">
+                    <div style="text-align: center; margin-top: 15px; padding: 10px;">
+                        No players has been added, start by <a href="#" data-bind="click:$root.addPlayer">adding your first</a>.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div data-bind="modal:isEdited" class="modal fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Edit player</h3>
+    </div>
+    <div class="modal-body" data-bind="with:$root.editedPlayer()">
+        <table class="inlineForm">
+            <tr>
+                <td>
+                    <label>Name</label></td>
+                <td>
+                    <input type="text" placeholder="Name" data-bind="value:name" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Number of slots</label>
+                </td>
+                <td>
+                    <input type="text" placeholder="Number of slots" data-bind="value:numberOfSlots" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Picture</label></td>
+                <td>
+                    <input type="text" placeholder="Address to picture" data-bind="value:pictureUrl" /></td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button data-dismiss="modal" data-bind="click: $root.deletePlayer" class="btn">Delete</button>
+        <button data-dismiss="modal" class="btn">Close</button>
+        <button data-dismiss="modal" data-bind="click: $root.savePlayer" class="btn btn-primary">Save & close</button>
+    </div>
+</div>
+

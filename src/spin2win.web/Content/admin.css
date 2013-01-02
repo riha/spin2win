@@ -1,0 +1,31 @@
+﻿table.playerList {
+  width: 100%;
+  font-size: 15px;
+}
+table.playerList tr.excluded td {
+  background-color: #FCF8E3;
+  color: #ccc;
+}
+table.playerList tr.excluded td.image img {
+  opacity: 0.4;
+}
+table.playerList td {
+  vertical-align: middle;
+  padding: 10px;
+  border-bottom: 1px solid #aaa;
+}
+table.playerList td.slots {
+  width: 30px;
+  text-align: right;
+}
+table.playerList td.image {
+  width: 30px;
+}
+table.playerList td.image img {
+  width: 30px;
+  height: 30px;
+}
+table.playerList td.actions {
+  width: 100px;
+  text-align: right;
+}

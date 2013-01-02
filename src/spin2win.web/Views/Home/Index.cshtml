@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+<div class="row firstRow">
+    <div class="span8">
+        <div class="panel">
+            <div class="header">Whats's Spin2Win?</div>
+            <div class="body">
+                <p>Spin2Win is a tiny web application made to spice things up a bit when doing draws in different types of compitions and similar things.</p>
+                <p>Say for example that you've run a compition at your office where you've given each employee a ticket in the final draw every time they have achived something. The big days then arrives when it's time to draw a winner! To make these kind of drawing a bit more exciting you can use Spin2Win!</p>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="panel">
+            <div class="header">Login</div>
+            <div class="body">
+
+                @if (!Context.User.Identity.IsAuthenticated)
+                {
+                    <div style="text-align: center">
+                        <fb:login-button show-faces="false" size="large"
+                            onlogin="Log.info('onlogin callback')">
+                            Login with Facebook
+                        </fb:login-button>
+                    </div>
+                }
+                else
+                {
+                    <p>Welcome back @Context.User.Identity.Name!</p>
+                    <p>Go to your @Html.ActionLink("admin page", "Index", "Admin") to setup a game!</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

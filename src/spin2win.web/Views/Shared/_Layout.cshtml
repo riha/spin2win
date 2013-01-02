@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/Content/bootstrap.readability.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/less", "~/bundles/css")
+    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap", "~/bundles/knockout", "~/bundles/game")
+
+    @RenderSection("js", false)
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="/">Spin2Win!</a>
+                @RenderSection("nav", false)
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <p style="text-align: right" class="navbar-text">@Context.User.Identity.Name
+                        <img alt="profile image" style="height:40px;width:40px;margin-left: 5px;" src="@(((User)Context.User.Identity).PictureLink())"/>
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+    @*@Html.ActionLink("Home", "Index", "Home")
+        @Html.ActionLink("Admin", "Index", "Admin")
+        @Html.ActionLink("Game", "Index", "Play")
+        @if (Request.IsAuthenticated)
+        {
+            <span>name: @Context.User.Identity.Name</span>
+        }*@
+    <div class="container mainContainer">
+        @RenderBody()
+    </div>
+    <script type="text/javascript">
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@ViewBag.ApplicationId',
+                    channelUrl: '@Request.Url.Scheme://@Request.Url.Authority@Url.Content("~/fbchannel.ashx")', // Channel File
+                    status: true, // check login status
+                    cookie: true, // enable cookies to allow the server to access the session
+                    xfbml: true,  // parse XFBML
+                    oauth: true
+                });
+
+                FB.Event.subscribe('auth.login', function () {
+                    window.location = '@Url.Action("Index", "Admin")';
+                });
+            };
+
+                // Load the SDK Asynchronously
+                (function (d) {
+                    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                    if (d.getElementById(id)) { return; }
+                    js = d.createElement('script'); js.id = id; js.async = true;
+                    js.src = "//connect.facebook.net/sv_SE/all.js";
+                    ref.parentNode.insertBefore(js, ref);
+                }(document));
+    </script>
+</body>
+</html>
