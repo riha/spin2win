@@ -121,7 +121,7 @@ module ViewModels.Play {
         public statsText(player: ActivePlayer) { 
             var numerOfSlots = player.numberOfSlots; 
             var totalNumberOfSlots = this.totalNumberOfSlots();
-            var percentage = Number(numerOfSlots / totalNumberOfSlots).toFixed(2);
+            var percentage = Number((numerOfSlots / totalNumberOfSlots) * 100).toPrecision(2);
             return numerOfSlots + '/' + totalNumberOfSlots  + ' (' + percentage +'%)'
         }
 
