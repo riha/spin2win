@@ -25,7 +25,7 @@
 
 @section nav
 {
-   @*<ul class="nav">
+    @*<ul class="nav">
         <li >@Html.ActionLink("Admin", "Index", "Admin")</li>
         <li class="active"><a href="#">Play!</a></li>
         <li><a href="#">About</a></li>
@@ -34,6 +34,9 @@
 
 <div class="row firstRow">
     <div class="span2">
+        <div style="margin-bottom:5px;font-size: 14px; text-align: center;">
+            @Html.ActionLink("← Back to admin", "Index", "Admin")
+        </div>
         <div class="panel">
             <div class="header" data-bind="text: currentPlayer().name">
                 Mr ?
@@ -49,6 +52,7 @@
                 <div class="btn btn-block btn-large btn-inverse" data-bind="click:function(data) {$root.spin(data,$root)},css:{'disabled':running()}">Spin!</div>
             </div>
         </div>
+
     </div>
     <div class="span6" style="position: relative;">
         <div class="panel">
@@ -94,13 +98,13 @@
 </div>
 <div class="modal fade" data-keyboard="false" data-backdrop="static" data-bind="modal:winner">
     <div class="modal-header">
-        @*        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
         <h3>Winner!</h3>
     </div>
-    <div class="modal-body" style="text-align:center;" data-bind="with:$root.winner()">
+    <div class="modal-body" style="text-align: center;" data-bind="with:$root.winner()">
         <p>We have a winner!</p>
-        <div><img src="" alt="" data-bind="attr:{src:pictureUrl!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" /></div>
-        <div style="margin-top:5px" data-bind="text: name"></div>
+        <div>
+            <img src="" alt="" data-bind="attr:{src:pictureUrl!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" /></div>
+        <div style="margin-top: 5px" data-bind="text: name"></div>
     </div>
     <div class="modal-footer">
         @Html.ActionLink("End game", "Index", "Admin", null, new { @class = "btn" })

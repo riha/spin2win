@@ -16,15 +16,6 @@
     </script>
 }
 
-@section nav
-{
-    @*    <ul class="nav">
-        <li class="active"><a href="#">Admin</a></li>
-        <li>@Html.ActionLink("Play!", "Index", "Play")</li>
-        <li><a href="#">About</a></li>
-    </ul>*@
-}
-
 <div class="row firstRow">
     <div class="span4">
         <div class="panel">
@@ -35,9 +26,7 @@
         </div>
         <div class="panel">
             <div class="body">
-                <!-- byt till knapp och ha en clieck event -->
-
-                <button class="btn btn-block btn-inverse btn-large" data-bind="css:{disabled:$root.isPlayable() == false}, click:$root.navigatePlay">Play!</button>
+                <button class="btn btn-block btn-inverse btn-large" data-bind="css:{disabled:!$root.isPlayable()}, click:$root.navigatePlay">Play!</button>
             </div>
         </div>
     </div>
