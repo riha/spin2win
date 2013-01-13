@@ -59,7 +59,9 @@ var ViewModels;
             ViewModel.prototype.totalNumberOfSlots = function () {
                 var i = 0;
                 $.each(this.players(), function (index, player) {
-                    i = i + Number(player.numberOfSlots());
+                    if(player.included()) {
+                        i = i + Number(player.numberOfSlots());
+                    }
                 });
                 return i;
             };

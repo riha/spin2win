@@ -76,7 +76,9 @@ module ViewModels.Admin {
             var i: number = 0;
 
             $.each(this.players(), (index, player: EditablePlayer) => {
-                i = i + Number(player.numberOfSlots());
+                if (player.included()) {
+                    i = i + Number(player.numberOfSlots());
+                }
             });
 
             return i;
