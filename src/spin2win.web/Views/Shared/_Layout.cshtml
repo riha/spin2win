@@ -15,7 +15,6 @@
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="/">Spin2Win!</a>
-                @RenderSection("nav", false)
                 @if (Context.User.Identity.IsAuthenticated)
                 {
                     <p style="text-align: right" class="navbar-text">@Context.User.Identity.Name
@@ -25,13 +24,6 @@
             </div>
         </div>
     </div>
-    @*@Html.ActionLink("Home", "Index", "Home")
-        @Html.ActionLink("Admin", "Index", "Admin")
-        @Html.ActionLink("Game", "Index", "Play")
-        @if (Request.IsAuthenticated)
-        {
-            <span>name: @Context.User.Identity.Name</span>
-        }*@
     <div class="container mainContainer">
         @RenderBody()
     </div>

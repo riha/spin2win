@@ -23,19 +23,10 @@
     </script>
 }
 
-@section nav
-{
-    @*<ul class="nav">
-        <li >@Html.ActionLink("Admin", "Index", "Admin")</li>
-        <li class="active"><a href="#">Play!</a></li>
-        <li><a href="#">About</a></li>
-    </ul>*@
-}
-
 <div class="row firstRow">
     <div class="span2">
-        <div class="backButton" >
-            @Html.ActionLink("← Back to admin", "Index", "Admin")
+        <div class="backButton">
+            @Html.ActionLink("← Back to admin", "Index", "Admin", null, new { onclick = "return confirm('This will abort your current game, are you sure?');" })
         </div>
         <div class="panel">
             <div class="header" data-bind="text: currentPlayer().name">
