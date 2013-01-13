@@ -37,6 +37,11 @@ var ViewModels;
             ActivePlayer.HidePlayerAnimationEnum = 1;
             ActivePlayer.ShowPlayerAnimationEnum = 2;
             ActivePlayer.NonePlayerAnimationEnum = 3;
+            ActivePlayer.defaultPlayer = function defaultPlayer() {
+                return {
+                    name: "Mr. Nobody"
+                };
+            }
             ActivePlayer.prototype.addWin = function () {
                 for(var i = 0; i < this.wins.length; i++) {
                     var current = this.wins[i];

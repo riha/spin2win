@@ -1,3 +1,13 @@
+.backButton {
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-align: center;
+
+    a {
+        color: #eee;
+    }
+}
+
 .playerList {
     .panel {
         float: left;
@@ -5,7 +15,7 @@
         .left {
             width: 81px;
             float: left;
-            padding: 10px;
+            padding: 10px 10px 0px 10px;
 
             .color {
                 float: left;
@@ -13,7 +23,7 @@
                 width: 8px;
                 -webkit-border-radius: 5px 0px 0px 5px;
                 -moz-border-radius: 5px 0px 0px 5px;
-                border-radius: 5px 0px 0px 5px
+                border-radius: 5px 0px 0px 5px;
             }
 
             .image {
@@ -28,14 +38,21 @@
                     border-radius: 0px 5px 5px 0px;
                 }
             }
+
+            .stats {
+                text-align: center;
+                font-size: 11px;
+                margin: 0px;
+                padding: 0px;
+            }
         }
 
         .center {
             float: left;
-            width: 155px;
+            width: 198px;
             border-left: 1px solid #E8E8E8;
-            border-right: 1px solid #E8E8E8;
-            min-height: 92px;
+            //border-right: 1px solid #E8E8E8;
+            min-height: 106px;
 
             .info {
                 .name {
@@ -43,6 +60,7 @@
                     padding: 5px 10px 5px 10px;
                     font-weight: bold;
                     font-size: 17px;
+                    min-height: 40px;
                 }
 
                 .stars {
@@ -52,22 +70,6 @@
                         margin-right: 3px;
                     }
                 }
-            }
-        }
-
-
-        .right {
-            float: left;
-            width: 40px;
-            padding-top: 32px;
-
-            .data {
-                vertical-align: middle;
-                text-shadow: -2px 2px 2px #666;
-                color: #333;
-                opacity: 0.7;
-                font-weight: bold;
-                text-align: center;
             }
         }
     }

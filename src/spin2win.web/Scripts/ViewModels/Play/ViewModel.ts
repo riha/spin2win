@@ -39,13 +39,14 @@ module ViewModels.Play {
             this.playerListAnimator = new PlayerListAnimator(this.activePlayers);
             this.playerListAnimator.showPlayers();
 
-            this.currentPlayer = ko.observable({ name: "Mr. Nobody" });
+            this.currentPlayer = ko.observable(ActivePlayer.defaultPlayer());
 
             this.degreeTransformation = ko.computed(() => {
                 return "rotate(" + this.degree() + "deg)";
             });
 
             this.continuePlay = <() => void >  this.continuePlay.bind(this);
+            this.spin = <() => void >  this.spin.bind(this);
 
             $(document).bind("move", (event, degress) => {
                 this.degree(degress);
@@ -65,8 +66,6 @@ module ViewModels.Play {
                     this.showRoundWinner();
                 }
             });
-
-            this.spin = <() => void >  this.spin.bind(this);
         }
 
         public continuePlay() {
@@ -78,6 +77,7 @@ module ViewModels.Play {
                 }
             }
 
+            this.currentPlayer(ActivePlayer.defaultPlayer());
             this.wheel.clear();
             this.wheel.draw(this.activePlayers());
             this.running(false);
@@ -118,6 +118,24 @@ module ViewModels.Play {
             this.running(false);
         }
 
+        public statsText(player: ActivePlayer) { 
+            var numerOfSlots = player.numberOfSlots; 
+            var totalNumberOfSlots = this.totalNumberOfSlots();
+            var percentage = Number(numerOfSlots / totalNumberOfSlots).toFixed(2);
+            return numerOfSlots + '/' + totalNumberOfSlots  + ' (' + percentage +'%)'
+        }
+
+        //TODO: This is duplicated from Admin viewmodel. If both Ediatable and Active player extended player we could share this method
+        public totalNumberOfSlots() {
+            var i: number = 0;
+
+            $.each(this.activePlayers(), (index, player: ActivePlayer) => {
+                i = i + Number(player.numberOfSlots);
+            });
+
+            return i;
+        }
+
         private static sortByWinnerFunc = function (a, b) {
             if (a.numberOfWins() < b.numberOfWins()) return 1;
             if (a.numberOfWins() > b.numberOfWins()) return -1;
@@ -126,6 +144,11 @@ module ViewModels.Play {
 
             return 0;
         };
+
+        public isFinalWinner() { 
+            console.log("is final", this.activePlayers().length, this.activePlayers().length < 3);
+            return this.activePlayers().length < 3;
+        }
 
         private setCurrentPlayer(player: ActivePlayer) {
             if (player.id != this.currentPlayer().id) {

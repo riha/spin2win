@@ -36,6 +36,10 @@ module ViewModels.Play {
             });
         }
 
+        public static defaultPlayer() { 
+            return { name: "Mr. Nobody" };
+        }
+
         public addWin() {
             for (var i = 0; i < this.wins.length; i++) {
                 var current = this.wins[i];

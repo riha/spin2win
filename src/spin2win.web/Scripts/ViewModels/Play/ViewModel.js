@@ -21,13 +21,12 @@ var ViewModels;
                 this.wheel.draw(this.activePlayers());
                 this.playerListAnimator = new Play.PlayerListAnimator(this.activePlayers);
                 this.playerListAnimator.showPlayers();
-                this.currentPlayer = ko.observable({
-                    name: "Mr. Nobody"
-                });
+                this.currentPlayer = ko.observable(Play.ActivePlayer.defaultPlayer());
                 this.degreeTransformation = ko.computed(function () {
                     return "rotate(" + _this.degree() + "deg)";
                 });
                 this.continuePlay = this.continuePlay.bind(this);
+                this.spin = this.spin.bind(this);
                 $(document).bind("move", function (event, degress) {
                     _this.degree(degress);
                 });
@@ -43,7 +42,6 @@ var ViewModels;
                         _this.showRoundWinner();
                     }
                 });
-                this.spin = this.spin.bind(this);
             }
             ViewModel.prototype.continuePlay = function () {
                 for(var i = 0; i < this.activePlayers().length; i++) {
@@ -52,6 +50,7 @@ var ViewModels;
                         break;
                     }
                 }
+                this.currentPlayer(Play.ActivePlayer.defaultPlayer());
                 this.wheel.clear();
                 this.wheel.draw(this.activePlayers());
                 this.running(false);
@@ -82,6 +81,19 @@ var ViewModels;
                 this.currentRound(this.currentRound() + 1);
                 this.running(false);
             };
+            ViewModel.prototype.statsText = function (player) {
+                var numerOfSlots = player.numberOfSlots;
+                var totalNumberOfSlots = this.totalNumberOfSlots();
+                var percentage = Number(numerOfSlots / totalNumberOfSlots).toFixed(2);
+                return numerOfSlots + '/' + totalNumberOfSlots + ' (' + percentage + '%)';
+            };
+            ViewModel.prototype.totalNumberOfSlots = function () {
+                var i = 0;
+                $.each(this.activePlayers(), function (index, player) {
+                    i = i + Number(player.numberOfSlots);
+                });
+                return i;
+            };
             ViewModel.sortByWinnerFunc = function (a, b) {
                 if(a.numberOfWins() < b.numberOfWins()) {
                     return 1;
@@ -96,6 +108,10 @@ var ViewModels;
                     return -1;
                 }
                 return 0;
+            };
+            ViewModel.prototype.isFinalWinner = function () {
+                console.log("is final", this.activePlayers().length, this.activePlayers().length < 3);
+                return this.activePlayers().length < 3;
             };
             ViewModel.prototype.setCurrentPlayer = function (player) {
                 if(player.id != this.currentPlayer().id) {

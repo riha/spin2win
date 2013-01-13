@@ -34,7 +34,7 @@
 
 <div class="row firstRow">
     <div class="span2">
-        <div style="margin-bottom:5px;font-size: 14px; text-align: center;">
+        <div class="backButton" >
             @Html.ActionLink("← Back to admin", "Index", "Admin")
         </div>
         <div class="panel">
@@ -78,6 +78,7 @@
                 <div class="image">
                     <img data-bind="attr:{src:pictureUrl}" src="@Url.Content("~/Content/Images/unknown.png")" />
                 </div>
+                <div data-bind="text:$root.statsText($data)" class="stats"></div>
             </div>
             <div class="center">
                 <div class="info">
@@ -88,11 +89,7 @@
                     </div>
                 </div>
             </div>
-            <div class="right">
-                <div class="data" data-bind="text: $index()+1"></div>
-            </div>
         </div>
-
     </div>
 
 </div>
@@ -101,13 +98,15 @@
         <h3>Winner!</h3>
     </div>
     <div class="modal-body" style="text-align: center;" data-bind="with:$root.winner()">
-        <p>We have a winner!</p>
+        <p data-bind="if:$root.isFinalWinner()">We have a <em>final</em> winner!</p>
+        <p data-bind="if:!$root.isFinalWinner()">We have a winner!</p>
         <div>
-            <img src="" alt="" data-bind="attr:{src:pictureUrl!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" /></div>
+            <img src="" alt="" data-bind="attr:{src:pictureUrl!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" />
+        </div>
         <div style="margin-top: 5px" data-bind="text: name"></div>
     </div>
     <div class="modal-footer">
         @Html.ActionLink("End game", "Index", "Admin", null, new { @class = "btn" })
-        <a href="#" data-dismiss="modal" data-bind="click: $root.continuePlay" class="btn btn-primary">Continue & find next winner!</a>
+        <button data-dismiss="modal" data-bind="visible:!$root.isFinalWinner(), click: $root.continuePlay" class="btn btn-primary">Continue & find next winner!</button>
     </div>
 </div>
