@@ -18,7 +18,7 @@ module ViewModels.Play {
         public currentRound: KnockoutObservableNumber = ko.observable(1);
         public running = ko.observable(false);
         public roundWinner: ActivePlayer;
-        public showWinner = ko.observable(false); //gör om till en game winner och säött dit spelaren
+        public winner = ko.observable();
         private playerListAnimator;
 
         constructor (players: Models.Player[], public settings: Models.Settings, private wheel: Models.Wheel) {
@@ -29,6 +29,8 @@ module ViewModels.Play {
                 this.activePlayers.push(activePlayer);
 
             });
+
+            console.log(this.winner());
 
             this.activePlayers.sort(ViewModel.sortByWinnerFunc);
 
@@ -57,15 +59,8 @@ module ViewModels.Play {
             $(document).bind("complete", (event, player: Models.Player) => {
                 this.roundWinner = this.getActivePlayerById(player.id);
 
-                //Här måste vi ta reda på hur långt vi kommit. Skall vi visa en round winner 
-                //eller en hel winner.
-
                 if (settings.numberOfRounds == this.roundWinner.numberOfWins() + 1) {
-                    //Borde dela viss kod här med round winner - 
-                    //kanske borde båda köras va?
-                    console.log("Winner!!!!")
-                    this.roundWinner.addWin();
-                    this.showWinner(true);
+                    this.showGameWinner();
                 } else {
                     this.showRoundWinner();
                 }
@@ -75,8 +70,23 @@ module ViewModels.Play {
         }
 
         public continuePlay() {
-            console.log("Nu kör vi!");
-            this.wheel.spin();
+
+            for (var i = 0; i < this.activePlayers().length; i++) {
+                if (this.winner().id == this.activePlayers()[i].id) {
+                    this.activePlayers.splice(i, 1);
+                    break;
+                }
+            }
+
+            this.wheel.clear();
+            this.wheel.draw(this.activePlayers());
+            this.running(false);
+            //this.wheel.spin();
+        }
+
+        private showGameWinner() {
+            this.roundWinner.addWin();
+            this.winner(this.roundWinner);
         }
 
         private showRoundWinner() {

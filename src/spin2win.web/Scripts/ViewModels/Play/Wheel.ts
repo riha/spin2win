@@ -38,13 +38,28 @@ module Models {
 
         }
 
-        //  Draws the basic shape of the wheel
+        public clear() {
+            this.slots = [];
+
+            this.context.save();
+            this.context.setTransform(1, 0, 0, 1, 0, 0);
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.context.restore();
+
+            this.contextBg.save();
+            this.contextBg.setTransform(1, 0, 0, 1, 0, 0);
+            this.contextBg.clearRect(0, 0, this.canvasBg.width, this.canvasBg.height);
+            this.contextBg.restore();
+        }
+
+        //  Draws the.restore(); basic shape of the wheel
         public draw(players) {
             this.shadow();
             this.background();
             for (var i = 0; i < players.length; i++) {
                 
                 var player = players[i];
+                console.log(player);
                 for (var y = 0; y < player.numberOfSlots; y++) {
                     this.slots.push(player);
                 };

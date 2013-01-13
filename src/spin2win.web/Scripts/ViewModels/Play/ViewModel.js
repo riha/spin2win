@@ -10,12 +10,13 @@ var ViewModels;
                 this.activePlayers = ko.observableArray([]);
                 this.currentRound = ko.observable(1);
                 this.running = ko.observable(false);
-                this.showWinner = ko.observable(false);
+                this.winner = ko.observable();
                 var colors = Common.Utils.colors;
                 $.each(players, function (index, item) {
                     var activePlayer = new Play.ActivePlayer(item.id, item.name, item.numberOfSlots, item.pictureUrl, settings.numberOfRounds, colors[index]);
                     _this.activePlayers.push(activePlayer);
                 });
+                console.log(this.winner());
                 this.activePlayers.sort(ViewModel.sortByWinnerFunc);
                 this.wheel.draw(this.activePlayers());
                 this.playerListAnimator = new Play.PlayerListAnimator(this.activePlayers);
@@ -37,9 +38,7 @@ var ViewModels;
                 $(document).bind("complete", function (event, player) {
                     _this.roundWinner = _this.getActivePlayerById(player.id);
                     if(settings.numberOfRounds == _this.roundWinner.numberOfWins() + 1) {
-                        console.log("Winner!!!!");
-                        _this.roundWinner.addWin();
-                        _this.showWinner(true);
+                        _this.showGameWinner();
                     } else {
                         _this.showRoundWinner();
                     }
@@ -47,8 +46,19 @@ var ViewModels;
                 this.spin = this.spin.bind(this);
             }
             ViewModel.prototype.continuePlay = function () {
-                console.log("Nu kör vi!");
-                this.wheel.spin();
+                for(var i = 0; i < this.activePlayers().length; i++) {
+                    if(this.winner().id == this.activePlayers()[i].id) {
+                        this.activePlayers.splice(i, 1);
+                        break;
+                    }
+                }
+                this.wheel.clear();
+                this.wheel.draw(this.activePlayers());
+                this.running(false);
+            };
+            ViewModel.prototype.showGameWinner = function () {
+                this.roundWinner.addWin();
+                this.winner(this.roundWinner);
             };
             ViewModel.prototype.showRoundWinner = function () {
                 var _this = this;

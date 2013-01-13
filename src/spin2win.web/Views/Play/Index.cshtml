@@ -25,7 +25,7 @@
 
 @section nav
 {
-@*    <ul class="nav">
+   @*<ul class="nav">
         <li >@Html.ActionLink("Admin", "Index", "Admin")</li>
         <li class="active"><a href="#">Play!</a></li>
         <li><a href="#">About</a></li>
@@ -92,16 +92,18 @@
     </div>
 
 </div>
-<div class="modal fade" data-bind="modal:showWinner">
+<div class="modal fade" data-keyboard="false" data-backdrop="static" data-bind="modal:winner">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        @*        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
         <h3>Winner!</h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="text-align:center;" data-bind="with:$root.winner()">
         <p>We have a winner!</p>
+        <div><img src="" alt="" data-bind="attr:{src:pictureUrl!=null?pictureUrl:'@Url.Content("~/Content/Images/unknown.png")'}" /></div>
+        <div style="margin-top:5px" data-bind="text: name"></div>
     </div>
     <div class="modal-footer">
         @Html.ActionLink("End game", "Index", "Admin", null, new { @class = "btn" })
-        <a href="#" data-dismiss="modal" data-bind="click: $root.continuePlay" class="btn btn-primary">Continue game and find next winner!</a>
+        <a href="#" data-dismiss="modal" data-bind="click: $root.continuePlay" class="btn btn-primary">Continue & find next winner!</a>
     </div>
 </div>
