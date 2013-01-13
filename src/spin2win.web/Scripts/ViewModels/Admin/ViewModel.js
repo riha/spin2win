@@ -25,7 +25,24 @@ var ViewModels;
                 if(this.settings == null) {
                     this.settings = Models.Settings.defaultObject();
                 }
+                this.isPlayable = ko.computed(function () {
+                    var includedPlayers = 0;
+                    for(var i = 0; i < _this.players().length; i++) {
+                        console.log(_this.players()[i], _this.players()[i].included());
+                        if(_this.players()[i].included()) {
+                            console.log("yes");
+                            includedPlayers++;
+                        }
+                    }
+                    return includedPlayers > 1;
+                });
             }
+            ViewModel.prototype.navigatePlay = function () {
+                if(this.isPlayable()) {
+                    console.log("Va fan");
+                    location.href = "/Play/Index";
+                }
+            };
             ViewModel.prototype.saveSetting = function (viewModel) {
                 $.ajax("/Admin/SaveSettings", {
                     data: ko.toJSON({

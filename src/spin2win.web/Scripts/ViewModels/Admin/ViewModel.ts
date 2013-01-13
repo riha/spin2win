@@ -12,6 +12,7 @@ module ViewModels.Admin {
         public players = ko.observableArray([]);
         public editedPlayer = ko.observable();
         public isEdited: () =>void;
+        public isPlayable: () =>void;
 
         constructor (private players: Models.Player[], public settings: Models.Settings) {
 
@@ -35,6 +36,26 @@ module ViewModels.Admin {
 
             if (this.settings == null) {
                 this.settings = Models.Settings.defaultObject();
+            }
+
+            this.isPlayable = ko.computed(() => {
+                var includedPlayers = 0;
+                for (var i = 0; i < this.players().length; i++) {
+                    console.log(this.players()[i], this.players()[i].included());
+                    if (this.players()[i].included()) {
+                        console.log("yes");
+                        includedPlayers++;
+                    }
+                }
+
+                return includedPlayers > 1;
+            });
+        }
+
+        public navigatePlay() {
+            if (this.isPlayable()) {
+                console.log("Va fan");
+                location.href = "/Play/Index";
             }
         }
 
@@ -68,10 +89,10 @@ module ViewModels.Admin {
                 player.included(true);
             }
 
-            this.persistPlayer(player, () => {}, "/Admin/SavePlayer")
+            this.persistPlayer(player, () => { }, "/Admin/SavePlayer")
         }
 
-        public editPlayer(player:EditablePlayer) {
+        public editPlayer(player: EditablePlayer) {
             this.editedPlayer(player);
         }
 

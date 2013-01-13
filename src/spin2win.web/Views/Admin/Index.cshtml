@@ -36,7 +36,8 @@
         <div class="panel">
             <div class="body">
                 <!-- byt till knapp och ha en clieck event -->
-                <a class="btn btn-block btn-inverse btn-large" data-bind="css:{disabled:players().length < 2}" href="@Url.Action("Index", "Play")">Play!</a>
+
+                <button class="btn btn-block btn-inverse btn-large" data-bind="css:{disabled:$root.isPlayable() == false}, click:$root.navigatePlay">Play!</button>
             </div>
         </div>
     </div>
